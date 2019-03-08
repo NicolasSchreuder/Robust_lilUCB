@@ -44,7 +44,7 @@ class lilUCB():
         # compute upper confidence bounds
         UCB_values = theta_hat + (1+self.β)*(1+np.sqrt(self.ϵ))*self.UCB(T)     
         
-        while not self.stopping_criterion(T, sum_T): 
+        while not self.stopping_criterion(T, sum_T) and sum_T < 1e7:
             # find and pull arm with maximum upper confidence bound
             I = np.argmax(UCB_values)
             
@@ -100,7 +100,7 @@ class robust_lilUCB():
         if self.theoretical_cst==True:
             cst = 4*np.sqrt(2)*self.σ/self.α
         else:
-            cst = 1
+            cst = 0.4
         return cst*np.sqrt(lil/T)
     
     def run(self, mab):
