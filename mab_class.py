@@ -47,7 +47,7 @@ class MAB():
         elif self.distrib == "huber":
             binomial_draw = np.random.binomial(n=1, p=0.1)
             sign = 2*np.random.binomial(n=1, p=0.5) - 1
-            reward = (1-binomial_draw)*np.random.normal(loc=self.θ[k], scale=self.σ) + sign*binomial_draw*1e2
+            reward = (1-binomial_draw)*np.random.normal(loc=self.θ[k], scale=self.σ) + sign*binomial_draw*100
         return reward
 
 # a = MAB(10, 'sparse', False, 0.3)

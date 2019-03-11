@@ -3,7 +3,7 @@ import numpy as np
 import bisect
 
 class lilUCB():
-    def __init__(self, δ, ϵ, β, K, σ=.5):
+    def __init__(self, K, δ=.1, ϵ=.01, β=1., σ=.5):
         """
         Initialize parameters
         """
@@ -29,7 +29,7 @@ class lilUCB():
         lil = np.log(np.log((1+self.ϵ)*T)/self.δ)
         return np.sqrt(self.UCB_cst*lil/T)
     
-    def run(self, mab):
+    def run(self, mab):        
         # initialization
         T = np.zeros(self.K) # number of pulls per arm
         sum_T = 0 # total number of pulls
@@ -44,7 +44,7 @@ class lilUCB():
         # compute upper confidence bounds
         UCB_values = theta_hat + (1+self.β)*(1+np.sqrt(self.ϵ))*self.UCB(T)     
         
-        while not self.stopping_criterion(T, sum_T) and sum_T < 1e7:
+        while not self.stopping_criterion(T, sum_T) and sum_T < 1e8:
             # find and pull arm with maximum upper confidence bound
             I = np.argmax(UCB_values)
             
@@ -64,7 +64,7 @@ class lilUCB():
 #lilUCB_ = lilUCB(δ=0.1, ϵ=0.01, β=1, K=20)
 
 class robust_lilUCB():
-    def __init__(self, δ, ϵ, β, K, σ=.5, theoretical_cst=False, n0=1):
+    def __init__(self, K, δ=.1, ϵ=.01, β=1., σ=.5, theoretical_cst=False, n0=1):
         self.ϵ = ϵ
         self.β = β
         self.λ = ((2+self.β)/self.β)**2
@@ -85,6 +85,8 @@ class robust_lilUCB():
         # algorithm confidence for given final confidence
         self.δ = np.log(1+ϵ)**(1+ϵ)/(4*(1+1/ϵ))*δ
         
+        self.log_δ = np.log(δ)
+        
         # True if bounds are computed with theoretical constants
         self.theoretical_cst = theoretical_cst
         
@@ -95,13 +97,13 @@ class robust_lilUCB():
         """
         Compute upper confidence bound for each arm
         """
-        lil = (1+self.ϵ)*np.log(np.log(T)) + np.log(1/self.δ)
+        lil = 2*((1+self.ϵ)*np.log(np.log(T)) - self.log_δ)
         
         if self.theoretical_cst==True:
             cst = 4*np.sqrt(2)*self.σ/self.α
         else:
-            cst = 0.4
-        return cst*np.sqrt(lil/T)
+            cst = 0.3
+        return (1+self.β)*cst*np.sqrt(lil/T)
     
     def run(self, mab):
         # initialization
@@ -120,11 +122,11 @@ class robust_lilUCB():
                 bisect.insort(theta_hat[k], reward)
                 T[k] +=1
                 sum_T+=1
-        
+                
         medians = np.array([theta_hat[k][T[k]//2] for k in range(self.K)])
         upper_bounds = self.upper_bound(T)
         
-        while not self.stopping_criterion(T, sum_T):
+        while (not self.stopping_criterion(T, sum_T)) and (sum_T < 1e8):
             
             # find max UCB index
             I = np.argmax(medians + (1+self.β)*upper_bounds)
