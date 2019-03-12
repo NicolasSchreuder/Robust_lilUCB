@@ -1,0 +1,11 @@
+2019-03-11 20:08:28,216 :: INFO :: Starting lilUCB procedure for 10 arms
+2019-03-11 20:08:28,635 :: INFO :: Starting robust lilUCB procedure for 10 arms
+2019-03-11 20:08:28,781 :: INFO :: Starting lilUCB procedure for 10 arms (Huber)
+2019-03-11 20:08:30,110 :: INFO :: Starting robust lilUCB procedure for 10 arms (Huber)
+2019-03-11 20:08:30,398 :: INFO :: Starting lilUCB procedure for 100 arms
+2019-03-11 20:08:36,256 :: INFO :: Starting robust lilUCB procedure for 100 arms
+2019-03-11 20:08:38,801 :: INFO :: Starting lilUCB procedure for 100 arms (Huber)
+2019-03-11 20:09:01,837 :: INFO :: Starting robust lilUCB procedure for 100 arms (Huber)
+2019-03-11 20:09:04,302 :: INFO :: Starting lilUCB procedure for 1000 arms
+2019-03-11 20:10:00,442 :: INFO :: Starting robust lilUCB procedure for 1000 arms
+2019-03-11 20:10:25,332 :: INFO :: Starting lilUCB procedure for 1000 arms (Huber)

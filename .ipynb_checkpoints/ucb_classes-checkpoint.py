@@ -44,7 +44,7 @@ class lilUCB():
         # compute upper confidence bounds
         UCB_values = theta_hat + (1+self.β)*(1+np.sqrt(self.ϵ))*self.UCB(T)     
         
-        while not self.stopping_criterion(T, sum_T) and sum_T < 1e8:
+        while not self.stopping_criterion(T, sum_T) and (sum_T < 5000*self.K) :
             # find and pull arm with maximum upper confidence bound
             I = np.argmax(UCB_values)
             
@@ -106,6 +106,7 @@ class robust_lilUCB():
         return (1+self.β)*cst*np.sqrt(lil/T)
     
     def run(self, mab):
+        
         # initialization
         T = np.zeros(self.K, dtype=int)
         sum_T = 0 # total number of pulls
@@ -126,7 +127,7 @@ class robust_lilUCB():
         medians = np.array([theta_hat[k][T[k]//2] for k in range(self.K)])
         upper_bounds = self.upper_bound(T)
         
-        while (not self.stopping_criterion(T, sum_T)) and (sum_T < 1e8):
+        while (not self.stopping_criterion(T, sum_T)) and (sum_T < 5000*self.K):
             
             # find max UCB index
             I = np.argmax(medians + (1+self.β)*upper_bounds)

@@ -18,6 +18,8 @@ class MAB():
         self.α = α
         self.σ = σ
         
+        np.random.seed(np.random.randint(0, 500))
+        
         # initialize parameter theta
         if scenario == 'sparse':
             # sparse model
