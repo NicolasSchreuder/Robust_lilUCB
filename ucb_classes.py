@@ -83,7 +83,8 @@ class robust_lilUCB():
         self.n0 = n0
         
         # algorithm confidence for given final confidence
-        self.δ = np.log(1+ϵ)**(1+ϵ)/(4*(1+1/ϵ))*δ
+        #self.δ = np.log(1+ϵ)**(1+ϵ)/(4*(1+1/ϵ))*δ
+        self.δ = ϵ*δ/4
         
         self.log_δ = np.log(δ)
         
@@ -97,12 +98,12 @@ class robust_lilUCB():
         """
         Compute upper confidence bound for each arm
         """
-        lil = 2*((1+self.ϵ)*np.log(np.log(T)) - self.log_δ)
+        lil = 2*((1+self.ϵ)*np.log(np.log2(T)) - self.log_δ)
         
         if self.theoretical_cst==True:
             cst = 4*np.sqrt(2)*self.σ/self.α
         else:
-            cst = 0.3
+            cst = 0.35
         return (1+self.β)*cst*np.sqrt(lil/T)
     
     def run(self, mab):
