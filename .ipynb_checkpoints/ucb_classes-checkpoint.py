@@ -84,7 +84,7 @@ class robust_lilUCB():
         
         # algorithm confidence for given final confidence
         #self.δ = np.log(1+ϵ)**(1+ϵ)/(4*(1+1/ϵ))*δ
-        self.δ = ϵ*δ/4
+        self.δ = ϵ*δ/2
         
         self.log_δ = np.log(δ)
         
@@ -101,7 +101,7 @@ class robust_lilUCB():
         lil = 2*((1+self.ϵ)*np.log(np.log2(T)) - self.log_δ)
         
         if self.theoretical_cst==True:
-            cst = 4*np.sqrt(2)*self.σ/self.α
+            cst = 2*np.sqrt(2)*self.σ/self.α
         else:
             cst = 0.35
         return (1+self.β)*cst*np.sqrt(lil/T)
