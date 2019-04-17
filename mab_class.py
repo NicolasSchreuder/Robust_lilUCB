@@ -46,6 +46,11 @@ class MAB():
         elif self.distrib == "gaussian":
             reward = np.random.normal(loc=self.θ[k], scale=self.σ)
         
+        elif self.distrib == "cauchy_gaussian_mixture":
+            binomial_draw = np.random.binomial(n=1, p=0.2)
+            reward = (self.θ[k] + (1-binomial_draw)*np.random.normal(scale=self.σ) 
+                      + binomial_draw*np.random.standard_cauchy())
+        
         elif self.distrib == "huber":
             binomial_draw = np.random.binomial(n=1, p=0.1)
             sign = 2*np.random.binomial(n=1, p=0.5) - 1

@@ -75,36 +75,26 @@ class robust_lilUCB():
         self.r = 0.5
         
         # strong convexity constant
-        self.α = 1
+        self.α = 0.5
         
         # warm-up index
-        #self.n_0 = ((32*(1+self.ϵ)*self.σ**2)/(self.r**2 * self.α**2)
-        #            *np.log(2*np.log((32*(1+self.ϵ)*self.σ**2)/(self.r**2 * self.α**2 * self.δ))/self.δ))
-        self.n0 = n0
+        self.n0 = 200
         
         # algorithm confidence for given final confidence
         #self.δ = np.log(1+ϵ)**(1+ϵ)/(4*(1+1/ϵ))*δ
-        self.δ = ϵ*δ/2
+        self.δ = δ
         
-        self.log_δ = np.log(δ)
-        
-        # True if bounds are computed with theoretical constants
-        self.theoretical_cst = theoretical_cst
-        
+        self.c_δ = 0.72*np.log(5.2/δ)
+        self.ucb_constant = (1+self.β)*3.4*self.σ/self.α
+                
     def stopping_criterion(self, T, sum_T):
         return ((1+self.λ)*T >= 1 + self.λ*sum_T).any()
     
     def upper_bound(self, T):
         """
         Compute upper confidence bound for each arm
-        """
-        lil = 2*((1+self.ϵ)*np.log(np.log2(T)) - self.log_δ)
-        
-        if self.theoretical_cst==True:
-            cst = 2*np.sqrt(2)*self.σ/self.α
-        else:
-            cst = 0.35
-        return (1+self.β)*cst*np.sqrt(lil/T)
+        """        
+        return self.ucb_constant*np.sqrt((np.log(np.log(2*T)) + self.c_δ)/T)
     
     def run(self, mab):
         
@@ -128,7 +118,7 @@ class robust_lilUCB():
         medians = np.array([theta_hat[k][T[k]//2] for k in range(self.K)])
         upper_bounds = self.upper_bound(T)
         
-        while (not self.stopping_criterion(T, sum_T)) and (sum_T < 5000*self.K):
+        while not self.stopping_criterion(T, sum_T):
             
             # find max UCB index
             I = np.argmax(medians + (1+self.β)*upper_bounds)
