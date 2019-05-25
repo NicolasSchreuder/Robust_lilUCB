@@ -78,13 +78,13 @@ class robust_lilUCB():
         self.α = 0.97
         
         # algorithm confidence
-        self.δ = ((np.sqrt(11*ν+9)-3)/11)**2
+        self.δ = ((np.sqrt(16*ν+9)-3)/16)**2
                 
-        self.c_δ = 0.72*np.log(10.4/self.δ)
-        self.ucb_constant = (1+self.β)*3.4*self.σ/self.α
+        self.c_δ = np.log(1/self.δ)
+        self.ucb_constant = (1+self.β)*4*self.σ/self.α
         
         # warm-up index
-        self.n_0 = 423
+        self.n_0 = 790
                 
     def stopping_criterion(self, T, sum_T):
         return ((1+self.λ)*T >= self.n_0 + self.λ*sum_T).any()
@@ -93,7 +93,7 @@ class robust_lilUCB():
         """
         Compute upper confidence bound for each arm
         """        
-        return self.ucb_constant*np.sqrt((np.log(np.log(2*T)) + self.c_δ)/T)
+        return self.ucb_constant*np.sqrt((np.log(np.log(T)) + self.c_δ)/T)
     
     def run(self, mab):
         

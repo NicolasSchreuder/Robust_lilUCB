@@ -1,0 +1,15 @@
+\begin{tabular}{llrrrrrr}
+\toprule
+        &                &    K=2 &    K=4 &    K=8 &   K=16 &   K=32 &   K=64 \\
+Scenario & Algorithm &        &        &        &        &        &        \\
+\midrule
+\multirow{2}{*}{Gaussian} & lil'UCB &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 \\
+        & Median lil'UCB &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 \\
+\cline{1-8}
+\multirow{2}{*}{Huber} & lil'UCB &  0.915 &  0.820 &  0.750 &  0.745 &  0.645 &  0.585 \\
+        & Median lil'UCB &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 \\
+\cline{1-8}
+\multirow{2}{*}{Student} & lil'UCB &  0.915 &  0.975 &  0.915 &  0.965 &  0.950 &  0.955 \\
+        & Median lil'UCB &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 &  1.000 \\
+\bottomrule
+\end{tabular}
